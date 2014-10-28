@@ -41,7 +41,7 @@ set :keep_releases, 5
 set :slack_team, "ednity"
 set :slack_token, "5jJ4ES3q0SKyWfkTZvokttQ2"
 set :slack_room, "#develop"
-set :slack_icon_url, 'http://i.gyazo.com/5c3fa5da85facc9148bd0cefee7ec70c.png'
+set :slack_icon_url, 'http://i.gyazo.com/37daea155a9d1cf778af2727f22985fc.png'
 set :slack_username, 'Capおじさん'
 
 namespace :deploy do
