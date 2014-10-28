@@ -1,7 +1,11 @@
-if ('staging' == app.get('env')) {
-  app.config = { logging: { LEVEL: 'DEBUG' } };
-}
-
+switch (process.env.NODE_ENV) {
+  case 'production':
+    var port = 3001;
+    break;
+  case 'staging':
+    var port = 34543;
+    break;
+};
 
 require('newrelic');
 var http = require("http");
@@ -9,17 +13,22 @@ var url = require('url');
 var socketio = require("socket.io");
 var fs = require("fs");
 
-var server = http.createServer().listen(process.env.VMC_APP_PORT || 3001);
+var server = http.createServer().listen(port || 3333);
 var io = socketio.listen(server);
 
 // notificationのping用
-server.on('request', function(request, response) {
-	var urlElements = url.parse(request.url, true);
-	var query = urlElements.query;
+server.on('request', function(req, res) {
+        if (req.url == '/health') {
+          res.writeHead(200, {'Content-Type': 'text/plain'});
+          res.end('are you ednitied?');
+          return;
+        }
+        var urlElements = url.parse(req.url, true);
+        var query = urlElements.query;
 
-	if (query.type == 'ping') {
-		io.sockets.in(query.group_id).emit("notification", { type: "ping" });
-	}
+        if (query.type == 'ping') {
+                io.sockets.in(query.group_id).emit("notification", { type: "ping" });
+        }
 });
 
 
