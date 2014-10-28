@@ -41,9 +41,8 @@ set :keep_releases, 5
 set :slack_team, "ednity"
 set :slack_token, "5jJ4ES3q0SKyWfkTZvokttQ2"
 set :slack_room, "#develop"
-
-#before 'deploy', 'slack:starting'
-#after 'deploy',  'slack:finished'
+set :slack_icon_url, 'http://i.gyazo.com/5c3fa5da85facc9148bd0cefee7ec70c.png'
+set :slack_username, 'Capおじさん'
 
 namespace :deploy do
   after :publishing, :restart
@@ -51,30 +50,28 @@ namespace :deploy do
   desc "Stop Forever"
   task :stop do
     on roles(:app) do
-      execute "forever stop #{current_path}/timeline.js"
+      execute "forever stop #{current_path}/timeline_node.js"
     end
   end
 
   desc "Start Forever"
   task :start do
     on roles(:app) do
-      # forever is running by upstart
+      # forever is running by forever
     end
   end
 
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      execute "NODE_ENV=#{stage} forever restart #{current_path}/timeline.js"
+      execute "NODE_ENV=#{fetch(:stage)} forever restart #{current_path}/timeline_node.js"
     end
   end
 
   desc "npm install"
   task :npm_install do
     on roles(:app) do
-      within current_path do
-        execute " npm install"
-      end
+      execute "cd #{current_path}; npm install"
     end
   end
 
