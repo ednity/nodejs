@@ -1,0 +1,21 @@
+{
+  "name": "node",
+  "version": "0.0.0",
+  "description": "node-server",
+  "main": "timeline_node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ednity/ednity.git/node"
+  },
+  "devDependencies": {
+    "socket.io": "~0.9.16"
+  },
+  "dependencies": {
+    "newrelic": "~1.3.2"
+  }
+}
