@@ -8,7 +8,8 @@ set :repo_url, 'git@github.com:ednity/nodejs.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
-set :branch, "master"
+#set :branch, "master"
+set :branch, "feature/add-capistrano"
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/ec2-user/nodejs'
@@ -39,6 +40,13 @@ set :linked_dirs, %w{node_modules log tmp/pids}
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
+set :slack_token, "5jJ4ES3q0SKyWfkTZvokttQ2"
+set :slack_room, "#develop"
+set :slack_subdomain, "ednity"
+
+before 'deploy', 'slack:starting'
+after 'deploy',  'slack:finished'
+
 namespace :deploy do
   after :publishing, :restart
 
@@ -59,7 +67,7 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      execute "forever restart #{current_path}/timeline.js"
+      execute "NODE_ENV=#{stage} forever restart #{current_path}/timeline.js"
     end
   end
 
@@ -73,13 +81,3 @@ namespace :deploy do
   before :restart, :npm_install
 
 end
-
-
-set :slack_token, "5jJ4ES3q0SKyWfkTZvokttQ2"
-set :slack_room, "#develop"
-set :slack_subdomain, "ednity"
-
-
-before 'deploy', 'slack:starting'
-after 'deploy',  'slack:finished'
-
