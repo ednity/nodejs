@@ -40,12 +40,12 @@ set :linked_dirs, %w{node_modules log tmp/pids}
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
+set :slack_team, "ednity"
 set :slack_token, "5jJ4ES3q0SKyWfkTZvokttQ2"
 set :slack_room, "#develop"
-set :slack_subdomain, "ednity"
 
-before 'deploy', 'slack:starting'
-after 'deploy',  'slack:finished'
+#before 'deploy', 'slack:starting'
+#after 'deploy',  'slack:finished'
 
 namespace :deploy do
   after :publishing, :restart
