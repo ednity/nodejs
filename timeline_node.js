@@ -1,3 +1,8 @@
+if ('staging' == app.get('env')) {
+  app.config = { logging: { LEVEL: 'DEBUG' } };
+}
+
+
 require('newrelic');
 var http = require("http");
 var url = require('url');

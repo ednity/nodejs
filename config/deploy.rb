@@ -1,6 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
+require 'capistrano/slack'
+
 set :application, 'Ednity-nodejs'
 set :repo_url, 'git@github.com:ednity/nodejs.git'
 
@@ -71,3 +73,13 @@ namespace :deploy do
   before :restart, :npm_install
 
 end
+
+
+set :slack_token, "5jJ4ES3q0SKyWfkTZvokttQ2"
+set :slack_room, "#develop"
+set :slack_subdomain, "ednity"
+
+
+before 'deploy', 'slack:starting'
+after 'deploy',  'slack:finished'
+
