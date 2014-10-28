@@ -1,8 +1,6 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
-require 'capistrano/slack'
-
 set :application, 'Ednity-nodejs'
 set :repo_url, 'git@github.com:ednity/nodejs.git'
 
@@ -15,7 +13,7 @@ set :branch, "feature/add-capistrano"
 set :deploy_to, '/home/ec2-user/nodejs'
 
 set :ssh_options, {
-    keys: %w(~/.ssh/ednity-aws.pem),
+    keys: %w(~/.ssh/ednity-aws-key.pem),
     forward_agent: true,
     auth_methods: %w(publickey)
   }
@@ -74,7 +72,9 @@ namespace :deploy do
   desc "npm install"
   task :npm_install do
     on roles(:app) do
-      execute "npm install"
+      within current_path do
+        execute " npm install"
+      end
     end
   end
 
