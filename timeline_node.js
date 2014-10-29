@@ -16,25 +16,24 @@ var SSL_CERT = './ssl/ednity-staging_cert.pem';
 
 
 require('newrelic');
-var http = require("http");
+var https = require("https");
 var url = require('url');
 var socketio = require("socket.io");
 var fs = require("fs");
 
-var server = http.createServer().listen(PORT, {
+var options = {
   key  : fs.readFileSync(SSL_KEY).toString(),
-  cert : fs.readFileSync(SSL_CERT).toString()
-});
-var io = socketio.listen(server);
+  cert : fs.readFileSync(SSL_CERT).toString(),
+  ca: [ fs.readFileSync(SSL_CERT) ],
+  NPNProtocols: ['http/1.1', 'spdy/3']
+}
 
-//server health check
-server.on('request', function(req, res) {
-  if (req.url == '/health') {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+var server = https.createServer(options,function(req, res) {
+    res.writeHead(200);
     res.end('are you ednitied?');
-    return;
-  }
-});
+}).listen(PORT);
+
+var io = socketio.listen(server);
 
 io.sockets.on("connection", function (socket) {
 
